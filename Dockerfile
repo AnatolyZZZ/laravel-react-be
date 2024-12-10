@@ -11,4 +11,16 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 # Set the working directory
 WORKDIR /var/www/html
 
-ENTRYPOINT ["sh", "-c", "chown -R www-data:www-data storage bootstrap/cache && chmod -R 775 storage bootstrap/cache && php artisan migrate --force && php artisan db:seed --force && tail -f /dev/null"]
+RUN ls -l /var/www/html
+
+# Set environment variable to allow running Composer as root
+ENV COMPOSER_ALLOW_SUPERUSER=1
+
+# Copy the entry script
+COPY ./docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+
+# Ensure the entry script is executable
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+# Set the entrypoint to the entry script
+ENTRYPOINT ["docker-entrypoint.sh"]

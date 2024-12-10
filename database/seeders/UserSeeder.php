@@ -14,12 +14,6 @@ class UserSeeder extends Seeder
     {
         // Truncate the users table to remove existing data
         User::truncate();
-
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        User::factory(10)->create();
     }
 }
